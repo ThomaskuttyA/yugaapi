@@ -1,16 +1,16 @@
 <?php
-include 'db_connection.php';
-
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
+
+include 'db_connection.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
 $email = $data['email'] ?? '';
 $password = $data['password'] ?? '';
 
-$sql = "SELECT * FROM yuga_users WHERE email = ?";
+$sql = "SELECT * FROM yuga_users WHERE email = ? LIMIT 1";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
 $stmt->execute();
@@ -40,4 +40,3 @@ if ($result->num_rows === 1) {
 
 echo json_encode($response);
 $conn->close();
-?>
